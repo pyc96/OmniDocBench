@@ -405,7 +405,7 @@ result/
       <td>0.162</td>
       <td>0.244</td>
       <td>0.072</td>
-      <td><strong>0.111</strong></td>
+      <td>0.111</td>
       <td>0.313</td>
       <td>0.581</td>
       <td>79.2</td>
@@ -454,9 +454,9 @@ result/
     <tr>
       <td>PaddleOCR PP-StructureV3</sup></td>
       <td>0.145</td>
-      <td>0.206</td>
+      <td><strong>0.206</strong></td>
       <td>0.058</td>
-      <td>0.088</td>
+      <td><strong>0.088</strong></td>
       <td>0.295</td>
       <td>0.535</td>
       <td>-</td>
@@ -464,9 +464,9 @@ result/
       <td>77.2</td>
       <td>83.9</td>
       <td>0.159</td>
-      <td>0.109</td>
+      <td<strong>0.109</strong></td>
       <td>0.069</td>
-      <td>0.091</td>
+      <td><strong>0.091</strong></td>
     </tr>
     <tr>
       <td>Mathpix</sup></td>
@@ -746,7 +746,7 @@ result/
     <tr>
       <td>Gemini2.5-Pro</td>
       <td><ins>0.148</ins></td>
-      <td><strong>0.212</strong></td>
+      <td>0.212</td>
       <td><ins>0.055</ins></td>
       <td>0.168</td>
       <td>0.356</td>
@@ -756,9 +756,9 @@ result/
       <td><strong>85.8</strong></td>
       <td><strong>86.4</strong></td>
       <td><strong>0.13</strong></td>
-      <td><strong>0.119</strong></td>
+      <td>0.119</td>
       <td><strong>0.049</strong></td>
-      <td><strong>0.121</strong></td>
+      <td>0.121</td>
     </tr>
     <tr>
       <td>GPT4o</td>
