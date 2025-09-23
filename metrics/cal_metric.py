@@ -13,7 +13,8 @@ from collections import defaultdict
 import pdb
 import copy
 import pandas as pd
-import numpy as np
+from .cdm_metric import CDM
+
 def get_groups(samples, group_info):
     group_samples = defaultdict(list)
     for sample in samples:
@@ -41,6 +42,7 @@ class call_TEDS():
         group_scores = defaultdict(list)
         group_scores_structure_only = defaultdict(list)
         samples = self.samples
+        per_table_score = {}
         for sample in samples:
             gt = sample['norm_gt'] if sample.get('norm_gt') else sample['gt']
             pred = sample['norm_pred'] if sample.get('norm_pred') else sample['pred']
@@ -61,6 +63,7 @@ class call_TEDS():
                 sample['metric'] = {}
             sample['metric']['TEDS'] = score
             sample['metric']['TEDS_structure_only'] = score_structure_only
+            per_table_score[sample['img_id']+'_'+str(sample['gt_idx'])] = {'TEDS': score, 'TEDS_structure_only': score_structure_only}
             for group in group_info:
                 select_flag = True
                 for k, v in group.items():
@@ -71,13 +74,14 @@ class call_TEDS():
                             select_flag = False
                 if select_flag:
                     group_scores[str(group)].append(score)
-
+        with open(f'./result/{save_name}_per_table_TEDS.json', 'w', encoding='utf-8') as f:
+            json.dump(per_table_score, f, indent=4, ensure_ascii=False)
         result = {}
         for group_name, scores in group_scores.items():
             if len(scores) > 0:
                 result[group_name] = sum(scores) / len(scores)    # average of normalized scores at sample level
             else:
-                result[group_name] = np.nan
+                result[group_name] = 'NaN'
                 print(f'Warning: Empyty matched samples for {group_name}.')
         
         structure_only_result = {}
@@ -85,7 +89,7 @@ class call_TEDS():
             if len(scores) > 0:
                 structure_only_result[group_name] = sum(scores) / len(scores)    # average of normalized scores at sample level
             else:
-                structure_only_result[group_name] = np.nan
+                structure_only_result[group_name] = 'NaN'
                 print(f'Warning: Empyty matched samples for {group_name}.')
 
         return samples, {'TEDS': result, 'TEDS_structure_only': structure_only_result}
@@ -161,29 +165,73 @@ class call_Edit_dist():
 
         df = pd.DataFrame(saved_samples)
         up_total_avg = df.groupby("image_name").apply(lambda x: x['Edit_num'].sum() / x['upper_len'].sum()) # page level, sum of edits divided by sum of max(gt,pred) lengths for each sample
+        all_total_avg = df['Edit_num'].sum() / df['upper_len'].sum()
+        # all_total_avg = df["Edit_dist"].mean()
         per_img_score = up_total_avg.to_dict()
-        with open(f'./result/{save_name}_per_page_edit.json', 'w') as f:
-            json.dump(per_img_score, f, indent=4)        
-
-        return samples, {'Edit_dist': {'ALL_page_avg': up_total_avg.mean()}}
+        with open(f'./result/{save_name}_per_page_edit.json', 'w', encoding='utf-8') as f:
+            json.dump(per_img_score, f, indent=4, ensure_ascii=False)        
+        
+        # if 'display_formula' in save_name:
+        #     return samples, {'Edit_dist': {'ALL_page_avg': all_total_avg}}
+        # else:
+        #     return samples, {'Edit_dist': {'ALL_page_avg': up_total_avg.mean()}}
+        
+        edit_whole = df['Edit_num'].sum() / df['upper_len'].sum()
+        df['ratio'] = df['Edit_num'] / df['upper_len']
+        edit_sample_avg = df['ratio'].mean()
+        # edit_sample_avg = df['metric']['Edit_dist'].mean()
+        return samples, {'Edit_dist': {'ALL_page_avg': up_total_avg.mean(), 'edit_whole': edit_whole, 'edit_sample_avg': edit_sample_avg}}
     
 @METRIC_REGISTRY.register("CDM")
 class call_CDM():
     def __init__(self, samples):
         self.samples = samples
     def evaluate(self, group_info=[], save_name='default'):
+        group_scores = defaultdict(list)
+        cal_cdm = CDM(output_root=f"result/{save_name}/CDM")
         if isinstance(self.samples, list):
             cdm_samples = copy.deepcopy(self.samples)
         else:
             cdm_samples = copy.deepcopy(self.samples.samples)
+        per_sample_score = {}
         for idx, sample in enumerate(cdm_samples):
-            sample['img_name'] = sample['img_id']
-            sample['img_id'] = str(idx)
+            sample['img_id_cdm'] = str(idx)
             sample['gt'] = sample['gt'].lstrip("$$").rstrip("$$").strip()
+            sample['gt'] = sample['gt'].lstrip("$").rstrip("$").strip()
             sample['pred'] = sample['pred'].split("```latex")[-1].split("```")[0]
             sample['pred'] = sample['pred'].lstrip("$$").rstrip("$$").strip()
+            sample['pred'] = sample['pred'].lstrip("$").rstrip("$").strip()
+            cdm_score = cal_cdm.evaluate(sample['gt'],sample['pred'],sample['img_id_cdm'])["F1_score"]
+            per_sample_score[sample['img_id']+'_'+str(sample['gt_idx'])] = cdm_score
+            group_scores['all'].append(cdm_score)
+            if not sample.get('metric'):
+                sample['metric'] = {}
+            sample['metric']['CDM'] = cdm_score
+            
+            for group in group_info:
+                select_flag = True
+                for k, v in group.items():
+                    for gt_attribute in sample['gt_attribute']:   # gt_attribute is a list containing all merged gt attributes
+                        if not gt_attribute:   # if no GT attributes, don't include in calculation
+                            select_flag = False
+                        elif gt_attribute[k] != v:  # if any gt attribute doesn't meet criteria, don't select
+                            select_flag = False
+                if select_flag:
+                    group_scores[str(group)].append(cdm_score)
+
+        with open(f'./result/{save_name}_per_sample_CDM.json', 'w', encoding='utf-8') as f:
+            json.dump(per_sample_score, f, indent=4, ensure_ascii=False)
 
         # time_stap = time.time()
-        with open(f'result/{save_name}_formula.json', 'w', encoding='utf-8') as f:
+        with open(f'result/{save_name}_result.json', 'w', encoding='utf-8') as f:
             json.dump(cdm_samples, f, indent=4, ensure_ascii=False)
-        return self.samples, False
+
+        result = {}
+        for group_name, scores in group_scores.items():
+            if len(scores) > 0:
+                result[group_name] = sum(scores) / len(scores)    # average of normalized scores at sample level
+            else:
+                result[group_name] = 'NaN'
+                print(f'Warning: Empyty matched samples for {group_name}.')
+        
+        return cdm_samples, {'CDM': result}
