@@ -464,7 +464,7 @@ result/
       <td>77.2</td>
       <td>83.9</td>
       <td>0.159</td>
-      <td<strong>0.109</strong></td>
+      <td><strong>0.109</strong></td>
       <td>0.069</td>
       <td><strong>0.091</strong></td>
     </tr>
