@@ -68,7 +68,7 @@ class CDM:
         
         for subset, latex in zip(['gt', 'pred'], [gt_latex, pred_latex]):
             output_path = os.path.join(self.output_root, subset)
-            temp_dir = os.path.join(self.output_root, 'temp_dir')
+            temp_dir = os.path.join(self.output_root, f'temp_dir_{subset}_{img_id}')
             os.makedirs(temp_dir, exist_ok=True)
             
             latex2bbox_color((latex, img_id, output_path, temp_dir, total_color_list))

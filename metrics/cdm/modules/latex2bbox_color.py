@@ -43,6 +43,7 @@ tabular_template = r"""
 \end{document}
 """
 
+# 需要配置Source Han Sans SC或其他中文字体
 formular_template = r"""
 \documentclass[12pt]{article}
 \usepackage[landscape]{geometry}
@@ -53,6 +54,11 @@ formular_template = r"""
 \usepackage{upgreek}
 \usepackage{amssymb}
 \usepackage{xcolor}
+\usepackage{xeCJK}
+\setCJKmainfont{Source Han Sans SC}
+\setCJKsansfont{Source Han Sans SC}
+\setCJKmonofont{Source Han Sans SC}
+\xeCJKsetup{CJKmath=true}
 \begin{document}
 \makeatletter
 \renewcommand*{\@textcolor}[3]{%%
@@ -69,8 +75,18 @@ formular_template = r"""
 """
 
 
-def run_cmd(cmd, timeout_sec=30):
-    proc = subprocess.Popen(cmd, shell=True)
+def run_cmd(cmd, timeout_sec=30, temp_dir=None):
+    # 设置进程独立的环境变量
+    env = os.environ.copy()
+    if temp_dir:
+        env['TMPDIR'] = temp_dir
+        env['TMP'] = temp_dir  
+        env['TEMP'] = temp_dir
+        env['MAGICK_TMPDIR'] = temp_dir
+        env['TEXMFCACHE'] = temp_dir
+        env['TEXMFVAR'] = temp_dir
+    
+    proc = subprocess.Popen(cmd, shell=True, env=env)
     kill_proc = lambda p: p.kill()
     timer = Timer(timeout_sec, kill_proc, [proc])
     try:
@@ -79,10 +95,9 @@ def run_cmd(cmd, timeout_sec=30):
     finally:
         timer.cancel()
         
-def convert_pdf2img(pdf_filename, png_filename):
+def convert_pdf2img(pdf_filename, png_filename, temp_dir=None):
     cmd = "magick -density 200 -quality 100 \"%s\" \"%s\""%(pdf_filename, png_filename)
-    # print(cmd)
-    os.system(cmd)
+    run_cmd(cmd, temp_dir=temp_dir)
 
 def crop_image(image_path, pad=8):
     img = Image.open(image_path).convert("L")
@@ -141,11 +156,14 @@ def latex2bbox_color(input_arg):
         return
     
     try:
+        latex = latex.replace("\n", " ")
+        latex = latex.replace("\%", "<PERCENTAGETOKEN>")
         ret, new_latex = tokenize_latex(latex, middle_file=os.path.join(temp_dir, basename+'.txt'))
         if not(ret and new_latex):
             log = f"ERROR, Tokenize latex failed: {basename}."
             logging.info(log)
             new_latex = latex
+        new_latex = new_latex.replace("< P E R C E N T A G E T O K E N >", "\%")
         latex = normalize_latex(new_latex)
         token_list = []
         l_split = latex.strip().split(' ')
@@ -183,18 +201,17 @@ def latex2bbox_color(input_arg):
         w.write(final_latex)
     # print(os.path.exists(tex_filename), tex_filename)
     # run_cmd(f"pdflatex -interaction=nonstopmode -output-directory={temp_dir} {tex_filename} >/dev/null")
-    run_cmd(f"/mnt/hwfile/opendatalab/guzhuangcheng/programme/texlive/bin/x86_64-linux/xelatex -interaction=nonstopmode -output-directory={temp_dir} \"{tex_filename}\" >/dev/null")
+    run_cmd(f"/share/sunyuefeng/packages/2023/bin/x86_64-linux/xelatex -interaction=nonstopmode -output-directory={temp_dir} \"{tex_filename}\" >/dev/null", temp_dir=temp_dir)
     try:
-        pass
-        # os.remove(tex_filename)
-        # os.remove(log_filename)
-        # os.remove(aux_filename)
+        os.remove(tex_filename)
+        os.remove(log_filename)
+        os.remove(aux_filename)
     except:
         pass
     pdf_filename = tex_filename[:-4]+'.pdf'
     if not os.path.exists(pdf_filename):
         log = f"ERROR, Compile pdf failed: {pdf_filename}"
-        # print(log)
+        logging.info(log)
     else:
         convert_pdf2img(pdf_filename, output_base_path)
         os.remove(pdf_filename)
@@ -204,18 +221,21 @@ def latex2bbox_color(input_arg):
         vis = Image.open(output_base_path)
         draw = ImageDraw.Draw(vis)
 
-        with open(output_bbox_path, 'w') as f:
+        with open(output_bbox_path, 'w', encoding='utf-8') as f:
             for token, box in zip(token_list, bbox_list):
                 item = {
                     "bbox": box,
                     "token": token
                 }
-                f.write(json.dumps(item)+'\n')
+                f.write(json.dumps(item, ensure_ascii=False)+'\n')
 
                 if not box:
                     continue
                 x_min, y_min, x_max, y_max = box
                 draw.rectangle([x_min, y_min, x_max, y_max], fill=None, outline=(0,250,0), width=1)
-                draw.text((x_min, y_min), token, (250,0,0))
+                try:
+                    draw.text((x_min, y_min), token, (250,0,0))
+                except:
+                    pass
             
         vis.save(output_vis_path)
