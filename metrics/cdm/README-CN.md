@@ -70,7 +70,9 @@ node -v
 
 ### 步骤.2 安装 imagemagic
 
-`apt-gt`命令安装的imagemagic版本是6.x，我们需要安装7.x的，所以从源码编译安装：
+`apt-get`命令安装的imagemagic版本是6.x，我们需要安装7.x的，所以从源码编译安装：
+
+（编译前需要确认系统内安装有libpng-dev，否则编译出来的magick无法支持cdm使用）
 ```
 git clone https://github.com/ImageMagick/ImageMagick.git ImageMagick-7.1.1
 

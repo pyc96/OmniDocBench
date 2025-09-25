@@ -201,7 +201,7 @@ def latex2bbox_color(input_arg):
         w.write(final_latex)
     # print(os.path.exists(tex_filename), tex_filename)
     # run_cmd(f"pdflatex -interaction=nonstopmode -output-directory={temp_dir} {tex_filename} >/dev/null")
-    run_cmd(f"/share/sunyuefeng/packages/2023/bin/x86_64-linux/xelatex -interaction=nonstopmode -output-directory={temp_dir} \"{tex_filename}\" >/dev/null", temp_dir=temp_dir)
+    run_cmd(f"xelatex -interaction=nonstopmode -output-directory={temp_dir} \"{tex_filename}\" >/dev/null", temp_dir=temp_dir)
     try:
         os.remove(tex_filename)
         os.remove(log_filename)

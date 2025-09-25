@@ -63,7 +63,9 @@ node -v
 
 ### step.2 install imagemagic
 
-the version of imagemagic installed by `apt-gt` usually be 6.x, so we also install it from source code.
+the version of imagemagic installed by `apt-get` usually be 6.x, so we also install it from source code.
+
+(confirm that libpng-dev is installed in your system, otherwise the install magick will not support cdm used)
 ```
 git clone https://github.com/ImageMagick/ImageMagick.git ImageMagick-7.1.1
 
