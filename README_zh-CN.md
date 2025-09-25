@@ -53,10 +53,11 @@ OmniDocBench
 - [引用](#引用)
 
 ## 更新
-[2025/09/25] 重大版本更新：
-  - 评测代码：（1）更新了混合匹配方案，使公式和文本之间也可以进行匹配，从而缓解了模型将公式写成unicode后造成的分数误差；（2）将CDM的计算直接写入metric部分，用户如果有CDM环境可以直接通过在config文件中配置`CDM`计算出指标，另外，仍保留了之前输出公式匹配对JSON文件的接口，命名为`CDM_plain`;
-  - 评测集：（1）报纸和笔记类型的图片从72DPI提升到200DPI；（2）新增374个页面，平衡了中英文页面的数量，并提升了包含公式页面的占比；（3）公式新增语种属性；（4）修复部分文本和表格的标注错别字；
-  - 榜单：（1）去除了中英文的分组，直接计算的是所有页面的平均分；（2）Overall指标的计算方式改为 ((1-文本编辑距离)*100 + 表格TEDS + 公式CDM)/3;
+[2025/09/25] **重大版本更新**：从版本**v1.0** 更新到 **v1.5**
+  - 评测代码：（1）更新了**混合匹配**方案，使公式和文本之间也可以进行匹配，从而缓解了模型将公式写成unicode后造成的分数误差；（2）将**CDM**的计算直接写入metric部分，用户如果有CDM环境可以直接通过在config文件中配置`CDM`计算出指标，另外，仍保留了之前输出公式匹配对JSON文件的接口，命名为`CDM_plain`;
+  - 评测集：（1）报纸和笔记类型的图片从72DPI提升到**200DPI**；（2）**新增374个页面**，平衡了中英文页面的数量，并提升了包含公式页面的占比；（3）公式新增语种属性；（4）修复部分文本和表格的标注错别字；
+  - 榜单：（1）去除了中英文的分组，直接计算的是所有页面的平均分；（2）**Overall**指标的计算方式改为 ((1-文本编辑距离)*100 + 表格TEDS + 公式CDM)/3;
+  - 注意：评测代码（本repo）和评测集（HuggingFace和OpenDataLab）的`main`分支已经更新到版本**v1.5**，如果仍想使用v1.0版本的代码和评测集，请切换分支到`v1_0`.
 
 [2025/09/09] 使用最新Dolphin推理脚本和模型权重，更新Dolphin的评测结果，新增了Dolphin infer脚本。
 
@@ -375,10 +376,12 @@ result/
 
 ### 端到端评测
 
-端到端评测是对模型在PDF页面内容解析上的精度作出的评测。以模型输出的对整个PDF页面解析结果的Markdown作为Prediction。Overall指标的计算方式为 ((1-文本编辑距离)*100 + 表格TEDS + 公式CDM)/3。
+端到端评测是对模型在PDF页面内容解析上的精度作出的评测。以模型输出的对整个PDF页面解析结果的Markdown作为Prediction。Overall指标的计算方式为:
+
+$$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Table TEDS} +\textit{Formula CDM}}{3}$$
 
 <table style="width:100%; border-collapse: collapse;">
-    <caption>Comprehensive evaluation of document parsing algorithms on OmniDocBench: performance metrics for text, formula, table, and reading order extraction, with overall scores derived from ground truth comparisons.</caption>
+    <caption>Comprehensive evaluation of document parsing on OmniDocBench (v1.5)</caption>
     <thead>
         <tr>
             <th>Model Type</th>
@@ -445,7 +448,7 @@ result/
             <td>0.108</td>
         </tr>
         <tr>
-            <td>MinerU2.0-vlm</td>
+            <td>MinerU2-VLM</td>
             <td>0.9B</td>
             <td>85.56</td>
             <td>0.078</td>
@@ -567,7 +570,7 @@ result/
             <td>0.073</td>
         </tr>
         <tr>
-            <td>Mineru2.0-Pipeline</td>
+            <td>Mineru2-pipeline</td>
             <td>-</td>
             <td>75.51</td>
             <td>0.209</td>
@@ -643,12 +646,12 @@ end2end_eval:          # 指定task名称，端到端评测通用该task
 
 `prediction`下的`data_path`输入的是模型对PDF页面解析结果的文件夹路径，路径中保存的是每个页面对应的markdown，文件名与图片名保持一致，仅将.jpg后缀替换成.md。
 
-除了已支持的metric以外，还支持导出[CDM](https://github.com/opendatalab/UniMERNet/tree/main/cdm)评测所需的格式，只需要在metric中配置CDM字段，即可将输出整理为CDM的输入格式，并存储在[result](./result)中。
+目前[CDM](https://github.com/opendatalab/UniMERNet/tree/main/cdm)已支持直接评测，需要根据[README](./metrics/cdm/README-CN.md)配置CDM环境后使用，并且在config文件中直接调用`CDM`。除此之外，仍然保留了之前导出CDM评测所需的格式的JSON文件，只需要在metric中配置`CDM_plain`字段，即可将输出整理为CDM的输入格式，并存储在[result](./result)中。
 
 在端到端的评测中，config里可以选择配置不同的匹配方式，一共有三种匹配方式：
 - `no_split`: 不对text block做拆分和匹配的操作，而是直接合并成一整个markdown进行计算，这种方式下，将不会输出分属性的结果，也不会输出阅读顺序的结果；
 - `simple_match`: 不进行任何截断合并操作，仅对文本做双换行的段落分割后，直接与GT进行一对一匹配；
-- `quick_match`：在段落分割的基础上，加上截断合并的操作，减少段落分割差异对最终结果的影响，通过*Adjacency Search Match*的方式进行截断合并；
+- `quick_match`：在段落分割的基础上，加上截断合并的操作，减少段落分割差异对最终结果的影响，通过*Adjacency Search Match*的方式进行截断合并；目前v1.5版本在评测方法上已全面升级为**混合匹配**的方法，允许公式和文本进行匹配，减少了模型输出公式为unicode格式造成的分数影响；
 
 我们推荐使用`quick_match`的方式以达到较好的匹配效果，但如果模型输出的段落分割较准确，也可以使用`simple_match`的方式，评测运行会更加迅速。匹配方法通过`config`中的`dataset`字段下的`match_method`字段进行配置。
 
@@ -1042,6 +1045,7 @@ OmniDocBench包含每个PDF页面的所有文字的bounding box信息以及对�
     </tr>
   </tbody>
 </table>
+<p>Component-level OCR text recognition evaluation on OmniDocBench (v1.0) text subset.</p>
 
 
 文字OCR评测可以参考[ocr](./configs/ocr.yaml)进行配置。 
@@ -1239,7 +1243,7 @@ OmniDocBench包含每个PDF页面的公式的bounding box信息以及对应的�
     </tr>
   </tbody>
 </table>
-<p>Component-level Table Recognition evaluation on OmniDocBench table subset. <i>(+/-)</i> means <i>with/without</i> special situation.</p>
+<p>Component-level Table Recognition evaluation on OmniDocBench (v1.0) table subset. <i>(+/-)</i> means <i>with/without</i> special situation.</p>
 
 
 表格识别评测可以参考[table_recognition](./configs/table_recognition.yaml)进行配置。 
@@ -1461,7 +1465,7 @@ OmniDocBench包含每个PDF页面的所有文档组件的bounding box信息，�
   </tbody>
 </table>
 
-<p>Component-level layout detection evaluation on OmniDocBench layout subset: mAP results by PDF page type.</p>
+<p>Component-level layout detection evaluation on OmniDocBench (v1.0) layout subset: mAP results by PDF page type.</p>
 
 
 Layout检测config文件参考[layout_detection](./configs/layout_detection.yaml)，数据格式参考[detection_prediction](./demo_data/detection/detection_prediction.json)。
@@ -1613,7 +1617,7 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
     <tr>
       <td>MinerU</td>
       <td><a href="https://mineru.org.cn/">MinerU</a></td>
-      <td>2.1.2</td>
+      <td>2.1.1</td>
     </tr>
     <tr>
       <td>PaddleOCR PP-StructureV3</td>
@@ -1623,7 +1627,7 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
     <tr>
       <td>Marker</td>
       <td><a href="https://github.com/VikParuchuri/marker">Marker</a></td>
-      <td>1.7.1</td>
+      <td>1.8.2</td>
     </tr>
     <tr>
       <td>Mathpix</td>
@@ -1651,9 +1655,9 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
       <td>0.7.0</td>
     </tr>
     <tr>
-      <td>MinerU2.0-vlm</td>
+      <td>MinerU2-VLM</td>
       <td><a href="https://github.com/opendatalab/MinerU">MinerU</a></td>
-      <td><a href="https://huggingface.co/opendatalab/MinerU2.0-2505-0.9B">MinerU2.0-vlm</a></td>
+      <td><a href="https://huggingface.co/opendatalab/MinerU2.0-2505-0.9B">MinerU2-VLM</a></td>
     </tr>
     <tr>
       <td>MonkeyOCR-pro-1.2B</td>

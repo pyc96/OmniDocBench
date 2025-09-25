@@ -65,7 +65,7 @@ node -v
 
 the version of imagemagic installed by `apt-get` usually be 6.x, so we also install it from source code.
 
-(confirm that libpng-dev is installed in your system, otherwise the install magick will not support cdm used)
+(Before compiling, ensure that libpng-dev is installed on the system; otherwise, the compiled magick will not support CDM usage.)
 ```
 git clone https://github.com/ImageMagick/ImageMagick.git ImageMagick-7.1.1
 
@@ -83,6 +83,8 @@ convert --version
 ```
 
 ### step.3 install latexpdf
+
+Rendering Chinese formulas requires a Chinese font, Source Han Sans SC is currently used .
 
 ```
 apt-get update

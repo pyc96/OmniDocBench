@@ -62,10 +62,11 @@ Currently supported metrics include:
 
 ## Updates
 
-[2025/09/25] Major update:
-  - Evaluation code: (1) Updated the hybrid matching algorithm, allowing formulas and text to be matched with each other, which alleviates score errors caused by models outputting formulas as unicode; (2) Integrated CDM calculation directly into the metric section, so users with a CDM environment can compute the metric directly by calling `CDM` in config file. The previous interface for outputting formula matching pairs as a JSON file is still retained, now named `CDM_plain` in config file.
-  - Benchmark dataset: (1) Increased the image resolution for newspaper and note types from 72 DPI to 200 DPI; (2) Added 374 new pages, balanced the number of Chinese and English pages, and increased the proportion of pages containing formulas; (3) Formulas update language atrributes; (4) Fixed typos in some text and table annotations.
-  - Leaderboard: (1) Removed the Chinese/English grouping, now calculating the average score across all pages; (2) The Overall metric is now calculated as ((1 - text Edit distance) * 100 + table TEDS + formula CDM) / 3;
+[2025/09/25] **Major update**: Updated from **v1.0** to **v1.5**
+  - Evaluation code: (1) Updated the **hybrid matching algorithm**, allowing formulas and text to be matched with each other, which alleviates score errors caused by models outputting formulas as unicode; (2) Integrated **CDM** calculation directly into the metric section, so users with a CDM environment can compute the metric directly by calling `CDM` in config file. The previous interface for outputting formula matching pairs as a JSON file is still retained, now named `CDM_plain` in config file.
+  - Benchmark dataset: (1) Increased the image resolution for newspaper and note types from 72 DPI to **200 DPI**; (2) Added **374 new pages**, balanced the number of Chinese and English pages, and increased the proportion of pages containing formulas; (3) Formulas update language atrributes; (4) Fixed typos in some text and table annotations.
+  - Leaderboard: (1) Removed the Chinese/English grouping, now calculating the average score across all pages; (2) The **Overall** metric is now calculated as ((1 - text Edit distance) * 100 + table TEDS + formula CDM) / 3;
+  - Note: The `main` branch of evaludation code (this repo) and dataset in HuggingFace and OpenDataLab are now updated to Version **v1.5**, if you still want to evaluate your model in v1.0, please checkout to branch `v1_0`.
   
 [2025/09/09] Updated Dolphin model evaluation with the latest inference script and model weights; Add Dolphin infer script;
 
@@ -389,10 +390,12 @@ The `<model_name>_<match_method>_<element>_result.json` file contains the matche
 
 ### End-to-End Evaluation
 
-End-to-end evaluation assesses the model's accuracy in parsing PDF page content. The evaluation uses the model's Markdown output of the entire PDF page parsing results as the prediction. The Overall metric is calculated as ((1 - text Edit distance) * 100 + table TEDS + formula CDM) / 3.
+End-to-end evaluation assesses the model's accuracy in parsing PDF page content. The evaluation uses the model's Markdown output of the entire PDF page parsing results as the prediction. The Overall metric is calculated as:
+
+$$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Table TEDS} +\textit{Formula CDM}}{3}$$
 
 <table style="width:100%; border-collapse: collapse;">
-    <caption>Comprehensive evaluation of document parsing algorithms on OmniDocBench: performance metrics for text, formula, table, and reading order extraction, with overall scores derived from ground truth comparisons.</caption>
+    <caption>Comprehensive evaluation of document parsing on OmniDocBench (v1.5)</caption>
     <thead>
         <tr>
             <th>Model Type</th>
@@ -459,7 +462,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
             <td>0.108</td>
         </tr>
         <tr>
-            <td>MinerU2.0-vlm</td>
+            <td>MinerU2-VLM</td>
             <td>0.9B</td>
             <td>85.56</td>
             <td>0.078</td>
@@ -581,7 +584,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
             <td>0.073</td>
         </tr>
         <tr>
-            <td>Mineru2.0-Pipeline</td>
+            <td>Mineru2-pipeline</td>
             <td>-</td>
             <td>75.51</td>
             <td>0.209</td>
@@ -656,12 +659,12 @@ end2end_eval:          # Specify task name, common for end-to-end evaluation
 
 The `data_path` under `prediction` is the folder path containing the model's PDF page parsing results. The folder contains markdown files for each page, with filenames matching the image names but replacing the `.jpg` extension with `.md`.
 
-In addition to the supported metrics, the system also supports exporting formats required for [CDM](https://github.com/opendatalab/UniMERNet/tree/main/cdm) evaluation. Simply configure the CDM field in the metrics section to format the output for CDM input and store it in [result](./result).
+[CDM](https://github.com/opendatalab/UniMERNet/tree/main/cdm) now supports direct evaluation, which requires you to set up the CDM environment according to the [README](./metrics/cdm/README.md) and then call `CDM` directly in the config file. In addition, we still support exporting the JSON format required for CDM evaluation as before: simply add the `CDM_plain` field in the metric configuration, and the output will be organized into the CDM input format and stored in the [result](./result) directory.
 
 For end-to-end evaluation, the config allows selecting different matching methods. There are three matching approaches:
 - `no_split`: Does not split or match text blocks, but rather combines them into a single markdown for calculation. This method will not output attribute-level results or reading order results.
 - `simple_match`: Performs only paragraph segmentation using double line breaks, then directly matches one-to-one with GT without any truncation or merging.
-- `quick_match`: Builds on paragraph segmentation by adding truncation and merging operations to reduce the impact of paragraph segmentation differences on final results, using *Adjacency Search Match* for truncation and merging.
+- `quick_match`: Builds on paragraph segmentation by adding truncation and merging operations to reduce the impact of paragraph segmentation differences on final results, using *Adjacency Search Match* for truncation and merging. In version 1.5, the evaluation method has been fully upgraded to a *Hybrid Matching* approach, allowing formulas and text to be matched with each other, which reduces the score impact caused by models outputting formulas in unicode format.
 
 We recommend using `quick_match` for better matching results. However, if the model's paragraph segmentation is accurate, `simple_match` can be used for faster evaluation. The matching method is configured through the `match_method` field under `dataset` in the config.
 
@@ -790,7 +793,7 @@ OmniDocBench contains bounding box information for formulas on each PDF page alo
     </tr>
   </tbody>
 </table>
-<p>Component-level formula recognition evaluation on OmniDocBench formula subset.</p>
+<p>Component-level formula recognition evaluation on OmniDocBench (v1.0) formula subset.</p>
 
 
 Formula recognition evaluation can be configured according to [formula_recognition](./configs/formula_recognition.yaml).
@@ -1055,6 +1058,7 @@ OmniDocBench contains bounding box information and corresponding text recognitio
     </tr>
   </tbody>
 </table>
+<p>Component-level OCR text recognition evaluation on OmniDocBench (v1.0) text subset.</p>
 
 OCR text recognition evaluation can be configured according to [ocr](./configs/ocr.yaml). 
 
@@ -1251,7 +1255,7 @@ OmniDocBench contains bounding box information for tables on each PDF page along
     </tr>
   </tbody>
 </table>
-<p>Component-level Table Recognition evaluation on OmniDocBench table subset. <i>(+/-)</i> means <i>with/without</i> special situation.</p>
+<p>Component-level Table Recognition evaluation on OmniDocBench(v1.0) table subset. <i>(+/-)</i> means <i>with/without</i> special situation.</p>
 
 
 Table recognition evaluation can be configured according to [table_recognition](./configs/table_recognition.yaml). 
@@ -1473,7 +1477,7 @@ OmniDocBench contains bounding box information for all document components on ea
   </tbody>
 </table>
 
-<p>Component-level layout detection evaluation on OmniDocBench layout subset: mAP results by PDF page type.</p>
+<p>Component-level layout detection evaluation on OmniDocBench (v1.0) layout subset: mAP results by PDF page type.</p>
 
 
 
@@ -1626,12 +1630,12 @@ We provide several tools in the `tools` directory:
     <tr>
       <td>MinerU</td>
       <td><a href="https://mineru.org.cn/">MinerU</a></td>
-      <td>2.1.2</td>
+      <td>2.1.1</td>
     </tr>
     <tr>
       <td>Marker</td>
       <td><a href="https://github.com/VikParuchuri/marker">Marker</a></td>
-      <td>1.7.1</td>
+      <td>1.8.2</td>
     </tr>
     <tr>
       <td>Mathpix</td>
@@ -1664,7 +1668,7 @@ We provide several tools in the `tools` directory:
       <td>0.7.0</td>
     </tr>
     <tr>
-      <td>MinerU2.0-vlm</td>
+      <td>MinerU2-VLM</td>
       <td><a href="https://github.com/opendatalab/MinerU">MinerU</a></td>
       <td><a href="https://huggingface.co/opendatalab/MinerU2.0-2505-0.9B">MinerU2.0-2505-0.9B</a></td>
     </tr>
