@@ -69,11 +69,11 @@ Currently supported metrics include:
   
 [2025/09/09] Updated Dolphin model evaluation with the latest inference script and model weights; Add Dolphin infer script;
 
-[2025/08/20] Updated PaddleOCR_PPv3, MonkeyOCR-pro-1.2 model evaluation; Added Mistral-OCR, Pix2text, phocr, Nanonets-OCR-s infer scripts;
+[2025/08/20] Updated PP-StructureV3, MonkeyOCR-pro-1.2B model evaluation; Added Mistral OCR, Pix2text, phocr, Nanonets-OCR-s infer scripts;
 
-[2025/07/31] Added MinerU2.0-2505-0.9B, Marker-1.7.1, PaddleOCR_PPv3, MonkeyOCR-pro-1.2, Dolphin, Nanonets-OCR-s, OCRFlux-3B, Qwen2.5-VL-7B and InternVL3-76B model evaluation; Updated versions of MinerU.
+[2025/07/31] Added MinerU2.0-vlm, Marker-1.7.1, PP-StructureV3, MonkeyOCR-pro-1.2B, Dolphin, Nanonets-OCR-s, OCRFlux-3B, Qwen2.5-VL-7B and InternVL3-78B model evaluation; Updated versions of MinerU.
 
-[2025/03/27] Added Pix2Text, Unstructured, OpenParse, Gemini2.0-flash, Gemini2.5-pro, Mistral OCR, olmOCR, Qwen2.5-VL-72B model evaluation;
+[2025/03/27] Added Pix2Text, Unstructured, OpenParse, Gemini-2.0 Flash, Gemini-2.5 Pro, Mistral OCR, olmOCR, Qwen2.5-VL-72B model evaluation;
 
 [2025/03/10] OmniDocBench has been accepted by CVPR 2025!
 
@@ -459,7 +459,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
             <td>0.108</td>
         </tr>
         <tr>
-            <td>MinerU2.0-VLM</td>
+            <td>MinerU2.0-vlm</td>
             <td>0.9B</td>
             <td>85.56</td>
             <td>0.078</td>
@@ -489,7 +489,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
             <td>0.145</td>
         </tr>
         <tr>
-            <td>Mistral-OCR</td>
+            <td>Mistral OCR</td>
             <td>-</td>
             <td>78.83</td>
             <td>0.164</td>
@@ -520,7 +520,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
         </tr>
         <tr>
             <td rowspan="5"><strong>General</strong><br><strong>VLMs</strong></td>
-            <td>Gemini2.5-Pro</td>
+            <td>Gemini-2.5 Pro</td>
             <td>-</td>
             <td>88.03</td>
             <td>0.075</td>
@@ -530,7 +530,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
             <td>0.097</td>
         </tr>
         <tr>
-            <td>Qwen2.5VL</td>
+            <td>Qwen2.5-VL</td>
             <td>72B</td>
             <td>87.02</td>
             <td>0.094</td>
@@ -551,7 +551,7 @@ End-to-end evaluation assesses the model's accuracy in parsing PDF page content.
         </tr>
         <tr>
             <td>InternVL3</td>
-            <td>76B</td>
+            <td>78B</td>
             <td>80.33</td>
             <td>0.131</td>
             <td>83.42</td>
@@ -1664,7 +1664,7 @@ We provide several tools in the `tools` directory:
       <td>0.7.0</td>
     </tr>
     <tr>
-      <td>MinerU2.0-2505-0.9B</td>
+      <td>MinerU2.0-vlm</td>
       <td><a href="https://github.com/opendatalab/MinerU">MinerU</a></td>
       <td><a href="https://huggingface.co/opendatalab/MinerU2.0-2505-0.9B">MinerU2.0-2505-0.9B</a></td>
     </tr>
@@ -1719,14 +1719,14 @@ We provide several tools in the `tools` directory:
       <td>2024-08-06</td>
     </tr>
     <tr>
-      <td>Gemini2.0-flash</td>
-      <td><a href="https://deepmind.google/technologies/gemini/flash/">Gemini2.0-flash</a></td>
+      <td>Gemini-2.0 Flash</td>
+      <td><a href="https://deepmind.google/technologies/gemini/flash/">Gemini-2.0 Flash</a></td>
       <td>-</td>
     </tr>
     <tr>
-      <td>Gemini2.5-pro-exp-0325</td>
-      <td><a href="https://deepmind.google/technologies/gemini/pro/">Gemini2.5-pro-exp-0325</a></td>
-      <td>2025-03-25</td>
+      <td>Gemini-2.5 Pro</td>
+      <td><a href="https://deepmind.google/technologies/gemini/pro/">Gemini-2.5 Pro</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <td>Qwen2-VL-72B</td>

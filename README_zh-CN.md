@@ -60,11 +60,11 @@ OmniDocBench
 
 [2025/09/09] 使用最新Dolphin推理脚本和模型权重，更新Dolphin的评测结果，新增了Dolphin infer脚本。
 
-[2025/08/20] 更新PaddleOCR_PPv3、MonkeyOCR-pro-1.2模型评测结果，新增了Mistral-OCR、Pix2text、phocr、Nanonets-OCR-s infer脚本。
+[2025/08/20] 更新PP-StructureV3、MonkeyOCR-pro-1.2B模型评测结果，新增了Mistral OCR、Pix2text、phocr、Nanonets-OCR-s infer脚本。
 
-[2025/07/31] 新增了MinerU2.0-2505-0.9B、Marker-1.7.1、PaddleOCR_PPv3、MonkeyOCR-pro-1.2、Dolphin、Nanonets-OCR-s、OCRFlux-3B、Qwen2.5-VL-7B、InternVL3-76B模型的评测；更新了MinerU版本。
+[2025/07/31] 新增了MinerU2.0-vlm、Marker-1.7.1、PP-StructureV3、MonkeyOCR-pro-1.2B、Dolphin、Nanonets-OCR-s、OCRFlux-3B、Qwen2.5-VL-7B、InternVL3-78B模型的评测；更新了MinerU版本。
 
-[2025/03/27] 新增了Pix2Text、Unstructured、OpenParse、Gemini2.0-flash、Gemini2.5-pro、Mistral OCR、OLMOCR、Qwen2.5-VL-72B模型的评测；
+[2025/03/27] 新增了Pix2Text、Unstructured、OpenParse、Gemini-2.0 Flash、Gemini-2.5 Pro、Mistral OCR、OLMOCR、Qwen2.5-VL-72B模型的评测；
 
 [2025/03/10] OmniDocBench被CVPR 2025接收啦！
 
@@ -445,7 +445,7 @@ result/
             <td>0.108</td>
         </tr>
         <tr>
-            <td>MinerU2.0-VLM</td>
+            <td>MinerU2.0-vlm</td>
             <td>0.9B</td>
             <td>85.56</td>
             <td>0.078</td>
@@ -475,7 +475,7 @@ result/
             <td>0.145</td>
         </tr>
         <tr>
-            <td>Mistral-OCR</td>
+            <td>Mistral OCR</td>
             <td>-</td>
             <td>78.83</td>
             <td>0.164</td>
@@ -506,7 +506,7 @@ result/
         </tr>
         <tr>
             <td rowspan="5"><strong>General</strong><br><strong>VLMs</strong></td>
-            <td>Gemini2.5-Pro</td>
+            <td>Gemini-2.5 Pro</td>
             <td>-</td>
             <td>88.03</td>
             <td>0.075</td>
@@ -516,7 +516,7 @@ result/
             <td>0.097</td>
         </tr>
         <tr>
-            <td>Qwen2.5VL</td>
+            <td>Qwen2.5-VL</td>
             <td>72B</td>
             <td>87.02</td>
             <td>0.094</td>
@@ -537,7 +537,7 @@ result/
         </tr>
         <tr>
             <td>InternVL3</td>
-            <td>76B</td>
+            <td>78B</td>
             <td>80.33</td>
             <td>0.131</td>
             <td>83.42</td>
@@ -1651,9 +1651,9 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
       <td>0.7.0</td>
     </tr>
     <tr>
-      <td>MinerU2.0-2505-0.9B</td>
+      <td>MinerU2.0-vlm</td>
       <td><a href="https://github.com/opendatalab/MinerU">MinerU</a></td>
-      <td><a href="https://huggingface.co/opendatalab/MinerU2.0-2505-0.9B">MinerU2.0-2505-0.9B</a></td>
+      <td><a href="https://huggingface.co/opendatalab/MinerU2.0-2505-0.9B">MinerU2.0-vlm</a></td>
     </tr>
     <tr>
       <td>MonkeyOCR-pro-1.2B</td>
@@ -1706,14 +1706,14 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
       <td>2024-08-06</td>
     </tr>
     <tr>
-      <td>Gemini2.0-flash</td>
-      <td><a href="https://deepmind.google/technologies/gemini/flash/">Gemini2.0-flash</a></td>
+      <td>Gemini-2.0 Flash</td>
+      <td><a href="https://deepmind.google/technologies/gemini/flash/">Gemini-2.0 Flash</a></td>
       <td>-</td>
     </tr>
     <tr>
-      <td>Gemini2.5-pro-exp-0325</td>
-      <td><a href="https://deepmind.google/technologies/gemini/pro/">Gemini2.5-pro-exp-0325</a></td>
-      <td>2025-03-25</td>
+      <td>Gemini-2.5 Pro</td>
+      <td><a href="https://deepmind.google/technologies/gemini/pro/">Gemini-2.5 Pro</a></td>
+      <td>-</td>
     </tr>
     <tr>
       <td>Qwen2-VL-72B</td>
