@@ -84,6 +84,7 @@ convert --version
 
 ### step.3 install latexpdf
 
+(Rendering Chinese formulas requires a Chinese font, current CDM used Source Han Sans SC.)
 ```
 apt-get update
 

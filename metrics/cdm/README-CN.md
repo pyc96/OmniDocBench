@@ -91,6 +91,7 @@ convert --version
 
 ### 步骤.3 安装 latexpdf
 
+（渲染中文公式需要中文字体，当前cdm中使用的是思源黑体Source Han Sans SC）
 ```
 apt-get update
 
