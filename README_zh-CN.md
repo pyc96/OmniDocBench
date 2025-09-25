@@ -410,12 +410,12 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
         <tr>
             <td>dots.ocr</td>
             <td>3B</td>
-            <td><u>88.41</u></td>
-            <td><u>0.048</u></td>
+            <td><ins>88.41</ins></td>
+            <td><ins>0.048</ins></td>
             <td>83.22</td>
-            <td><u>86.78</u></td>
-            <td><u>90.62</u></td>
-            <td><u>0.053</u></td>
+            <td><ins>86.78</ins></td>
+            <td><ins>90.62</ins></td>
+            <td><ins>0.053</ins></td>
         </tr>
         <tr>
             <td>MonkeyOCR-pro-3B</td>
@@ -523,7 +523,7 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
             <td>72B</td>
             <td>87.02</td>
             <td>0.094</td>
-            <td><u>88.27</u></td>
+            <td><ins>88.27</ins></td>
             <td>82.15</td>
             <td>86.22</td>
             <td>0.102</td>
