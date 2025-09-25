@@ -741,11 +741,6 @@ OmniDocBench包含每个PDF页面的公式的bounding box信息以及对应的�
       <td>0.322</td>
     </tr>
     <tr>
-      <td>PaddleOCR PP-StructureV3</td>
-      <td><a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR</a></td>
-      <td><a href="https://www.paddleocr.ai/latest/version3.x/pipeline_usage/PP-StructureV3.html">PP-StructureV3</a></td>
-    </tr>
-    <tr>
       <td>Pix2Tex</td>
       <td>73.9</td>
       <td>39.5</td>
@@ -1619,6 +1614,11 @@ config中参数解释以及数据集格式请参考`Layout检测`小节，公式
       <td>MinerU</td>
       <td><a href="https://mineru.org.cn/">MinerU</a></td>
       <td>2.1.2</td>
+    </tr>
+    <tr>
+      <td>PaddleOCR PP-StructureV3</td>
+      <td><a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR</a></td>
+      <td><a href="https://www.paddleocr.ai/latest/version3.x/pipeline_usage/PP-StructureV3.html">PP-StructureV3</a></td>
     </tr>
     <tr>
       <td>Marker</td>
