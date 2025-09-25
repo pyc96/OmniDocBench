@@ -313,3 +313,25 @@ class call_CDM():
                 print(f'Warning: Empty matched samples for {group_name}.')
         
         return cdm_samples, {'CDM': result}
+
+
+@METRIC_REGISTRY.register("CDM_plain")
+class call_CDM_plain():
+    def __init__(self, samples):
+        self.samples = samples
+    def evaluate(self, group_info=[], save_name='default'):
+        if isinstance(self.samples, list):
+            cdm_samples = copy.deepcopy(self.samples)
+        else:
+            cdm_samples = copy.deepcopy(self.samples.samples)
+        for idx, sample in enumerate(cdm_samples):
+            sample['img_name'] = sample['img_id']
+            sample['img_id'] = str(idx)
+            sample['gt'] = sample['gt'].lstrip("$$").rstrip("$$").strip()
+            sample['pred'] = sample['pred'].split("```latex")[-1].split("```")[0]
+            sample['pred'] = sample['pred'].lstrip("$$").rstrip("$$").strip()
+
+        # time_stap = time.time()
+        with open(f'result/{save_name}_formula.json', 'w', encoding='utf-8') as f:
+            json.dump(cdm_samples, f, indent=4, ensure_ascii=False)
+        return self.samples, False
