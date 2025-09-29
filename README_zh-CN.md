@@ -1,5 +1,3 @@
-![Image](https://github.com/user-attachments/assets/22a10ee4-c993-471f-9c9f-7a6c4d2e3df8)
-
 <h1 align="center">
 OmniDocBench
 </h1>
