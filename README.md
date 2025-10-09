@@ -420,17 +420,27 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
             <td><strong>0.044</strong></td>
         </tr>
         <tr>
+            <td>MonkeyOCR-pro-3B</td>
+            <td>3B</td>
+            <td><ins>88.85</ins></td>
+            <td>0.075</td>
+            <td>87.25</td>
+            <td><ins>86.78</ins></td>
+            <td><ins>90.63</ins></td>
+            <td>0.128</td>
+        </tr>
+        <tr>
             <td>dots.ocr</td>
             <td>3B</td>
-            <td><ins>88.41</ins></td>
+            <td>88.41</td>
             <td><ins>0.048</ins></td>
             <td>83.22</td>
             <td><ins>86.78</ins></td>
-            <td><ins>90.62</ins></td>
+            <td>90.62</td>
             <td><ins>0.053</ins></td>
         </tr>
         <tr>
-            <td>MonkeyOCR-pro-3B</td>
+            <td>MonkeyOCR-3B</td>
             <td>3B</td>
             <td>87.13</td>
             <td>0.075</td>
@@ -1674,6 +1684,16 @@ We provide several tools in the `tools` directory:
       <td>MonkeyOCR-pro-1.2B</td>
       <td><a href="https://github.com/Yuliang-Liu/MonkeyOCR">MonkeyOCR</a></td>
       <td><a href="https://huggingface.co/echo840/MonkeyOCR-pro-1.2B">HuggingFace MonkeyOCR-pro-1.2B</a></td>
+    </tr>
+    <tr>
+      <td>MonkeyOCR-pro-3B</td>
+      <td><a href="https://github.com/Yuliang-Liu/MonkeyOCR">MonkeyOCR</a></td>
+      <td><a href="https://huggingface.co/echo840/MonkeyOCR-pro-3B">HuggingFace MonkeyOCR-pro-3B</a></td>
+    </tr>
+    <tr>
+      <td>MonkeyOCR-3B</td>
+      <td><a href="https://github.com/Yuliang-Liu/MonkeyOCR">MonkeyOCR</a></td>
+      <td><a href="https://huggingface.co/echo840/MonkeyOCR">HuggingFace MonkeyOCR-3B</a></td>
     </tr>
     <tr>
       <td>Dolphin</td>
