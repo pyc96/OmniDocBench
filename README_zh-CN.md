@@ -395,7 +395,7 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
     </thead>
     <tbody>
         <tr>
-            <td rowspan="11"><strong>Specialized</strong><br><strong>VLMs</strong></td>
+            <td rowspan="12"><strong>Specialized</strong><br><strong>VLMs</strong></td>
             <td>MinerU2.5</td>
             <td>1.2B</td>
             <td><strong>90.67</strong></td>
