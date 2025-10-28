@@ -64,7 +64,7 @@ class call_TEDS():
                 sample['metric'] = {}
             sample['metric']['TEDS'] = score
             sample['metric']['TEDS_structure_only'] = score_structure_only
-            per_table_score[sample['img_id']+'_'+str(sample['gt_idx'])] = {'TEDS': score, 'TEDS_structure_only': score_structure_only}
+            per_table_score[sample['img_id']+'_'+str(sample.get('gt_idx', 0))] = {'TEDS': score, 'TEDS_structure_only': score_structure_only}
             for group in group_info:
                 select_flag = True
                 for k, v in group.items():
@@ -223,7 +223,7 @@ def _process_single_cdm_sample(args):
     return {
         'sample': sample_copy,
         'cdm_score': cdm_score,
-        'sample_key': sample_copy['img_id'] + '_' + str(sample_copy['gt_idx']),
+        'sample_key': sample_copy['img_id'] + '_' + str(sample_copy.get('gt_idx', 0)),
         'matched_groups': matched_groups,
         'original_index': idx
     }
@@ -273,7 +273,7 @@ class call_CDM():
                     results.append({
                         'sample': sample_copy,
                         'cdm_score': 0.0,
-                        'sample_key': sample_copy['img_id'] + '_' + str(sample_copy['gt_idx']),
+                        'sample_key': sample_copy['img_id'] + '_' + str(sample_copy.get('gt_idx', 0)),
                         'matched_groups': [],
                         'original_index': idx
                     })

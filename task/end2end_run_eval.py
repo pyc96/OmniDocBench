@@ -21,7 +21,7 @@ class End2EndEval():
             
             for page in pages:
                 img_path = os.path.basename(page['page_info']['image_path'])
-                page_info[img_path] = page['page_info']['page_attribute']
+                page_info[img_path[:-4]] = page['page_info']['page_attribute']
 
         for element in metrics_list.keys():
             result = {}

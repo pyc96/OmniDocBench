@@ -85,7 +85,7 @@ def get_page_split(samples, page_info):   # Page level metric
         return {}
     result_list = defaultdict(list)
     for sample in samples:
-        img_name = sample['img_id'] if sample['img_id'].endswith('.jpg') or sample['img_id'].endswith('.png') else '_'.join(sample['img_id'].split('_')[:-1])
+        img_name = sample['img_id'][:-4] if sample['img_id'].endswith('.jpg') or sample['img_id'].endswith('.png') else '_'.join(sample['img_id'].split('_')[:-1])
         page_info_s = page_info[img_name]
         if not sample.get('metric'):
             continue

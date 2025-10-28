@@ -60,6 +60,8 @@ Currently supported metrics include:
 
 ## Updates
 
+[2025/10/28] Update PaddleOCR-VL, Qwen3-VL-235B-A22B-Instruct, Deepseek-OCR, Dolphin-1.5 model evaluation.
+
 [2025/09/25] **Major update**: Updated from **v1.0** to **v1.5**
   - Evaluation code: (1) Updated the **hybrid matching algorithm**, allowing formulas and text to be matched with each other, which alleviates score errors caused by models outputting formulas as unicode; (2) Integrated **CDM** calculation directly into the metric section, so users with a CDM environment can compute the metric directly by calling `CDM` in config file. The previous interface for outputting formula matching pairs as a JSON file is still retained, now named `CDM_plain` in config file.
   - Benchmark dataset: (1) Increased the image resolution for newspaper and note types from 72 DPI to **200 DPI**; (2) Added **374 new pages**, balanced the number of Chinese and English pages, and increased the proportion of pages containing formulas; (3) Formulas update language atrributes; (4) Fixed typos in some text and table annotations.
@@ -409,35 +411,44 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
     </thead>
     <tbody>
         <tr>
-            <td rowspan="12"><strong>Specialized</strong><br><strong>VLMs</strong></td>
+            <td rowspan="15"><strong>Specialized</strong><br><strong>VLMs</strong></td>
+            <td>PaddleOCR-VL</td>
+            <td>0.9B</td>
+            <td><strong>91.93</strong></td>
+            <td><strong>0.039</strong></td>
+            <td><strong>88.67</strong></td>
+            <td><strong>91.01</strong></td>
+            <td><strong>94.85</strong></td>
+            <td><ins>0.048</ins></td>
+        </tr>
             <td>MinerU2.5</td>
             <td>1.2B</td>
-            <td><strong>90.67</strong></td>
-            <td><strong>0.047</strong></td>
-            <td><strong>88.46</strong></td>
-            <td><strong>88.22</strong></td>
-            <td><strong>92.38</strong></td>
+            <td><ins>90.67</ins></td>
+            <td><ins>0.047</ins></td>
+            <td><ins>88.46</ins></td>
+            <td><ins>88.22</ins></td>
+            <td><ins>92.38</ins></td>
             <td><strong>0.044</strong></td>
         </tr>
         <tr>
             <td>MonkeyOCR-pro-3B</td>
             <td>3B</td>
-            <td><ins>88.85</ins></td>
+            <td>88.85</td>
             <td>0.075</td>
             <td>87.25</td>
-            <td><ins>86.78</ins></td>
-            <td><ins>90.63</ins></td>
+            <td>86.78</td>
+            <td>90.63</td>
             <td>0.128</td>
         </tr>
         <tr>
             <td>dots.ocr</td>
             <td>3B</td>
             <td>88.41</td>
-            <td><ins>0.048</ins></td>
+            <td>0.048</td>
             <td>83.22</td>
-            <td><ins>86.78</ins></td>
+            <td>86.78</td>
             <td>90.62</td>
-            <td><ins>0.053</ins></td>
+            <td>0.053</td>
         </tr>
         <tr>
             <td>MonkeyOCR-3B</td>
@@ -448,6 +459,16 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
             <td>81.39</td>
             <td>85.92</td>
             <td>0.129</td>
+        </tr>
+        <tr>
+            <td>Deepseek-OCR</td>
+            <td>3B</td>
+            <td>87.01</td>
+            <td>0.073</td>
+            <td>83.37</td>
+            <td>84.97</td>
+            <td>88.80</td>
+            <td>0.086</td>
         </tr>
         <tr>
             <td>MonkeyOCR-pro-1.2B</td>
@@ -490,6 +511,16 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
             <td>0.121</td>
         </tr>
         <tr>
+            <td>Dolphin-1.5</td>
+            <td>0.3B</td>
+            <td>83.21</td>
+            <td>0.092</td>
+            <td>80.78</td>
+            <td>78.06</td>
+            <td>84.10</td>
+            <td>0.080</td>
+        </tr>
+        <tr>
             <td>POINTS-Reader</td>
             <td>3B</td>
             <td>80.98</td>
@@ -521,7 +552,7 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
         </tr>
         <tr>
             <td>Dolphin</td>
-            <td>322M</td>
+            <td>0.3B</td>
             <td>74.67</td>
             <td>0.125</td>
             <td>67.85</td>
@@ -530,7 +561,16 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
             <td>0.124</td>
         </tr>
         <tr>
-            <td rowspan="5"><strong>General</strong><br><strong>VLMs</strong></td>
+            <td rowspan="6"><strong>General</strong><br><strong>VLMs</strong></td>
+            <td>Qwen3-VL-235B-A22B-Instruct</td>
+            <td>235B</td>
+            <td>89.15</td>
+            <td>0.069</td>
+            <td>88.14</td>
+            <td>86.21</td>
+            <td>90.55</td>
+            <td>0.068</td>
+        </tr>
             <td>Gemini-2.5 Pro</td>
             <td>-</td>
             <td>88.03</td>
@@ -545,7 +585,7 @@ $$\text{Overall} = \frac{(1-\textit{Text Edit Distance}) \times 100 + \textit{Ta
             <td>72B</td>
             <td>87.02</td>
             <td>0.094</td>
-            <td><ins>88.27</ins></td>
+            <td>88.27</td>
             <td>82.15</td>
             <td>86.22</td>
             <td>0.102</td>
@@ -1774,6 +1814,26 @@ We provide several tools in the `tools` directory:
       <td>InternVL3-78B</td>
       <td><a href="https://github.com/OpenGVLab/InternVL">InternVL</a></td>
       <td><a href="https://huggingface.co/OpenGVLab/InternVL3-78B">Hugging Face InternVL3-78B</a></td>
+    </tr>
+    <tr>
+      <td>Qwen3-VL-235B-A22B-Instruct</td>
+      <td><a href="https://github.com/QwenLM/Qwen3-VL">Qwen3-VL</a></td>
+      <td><a href="https://huggingface.co/Qwen/Qwen3-VL-235B-A22B-Instruct">Hugging Face Qwen3-VL-235B-A22B-Instruct</a></td>
+    </tr>
+    <tr>
+      <td>DeepSeek-OCR</td>
+      <td><a href="https://github.com/deepseek-ai/DeepSeek-OCR">DeepSeek-OCR</a></td>
+      <td><a href="https://huggingface.co/deepseek-ai/DeepSeek-OCR">Hugging Face DeepSeek-OCR</a></td>
+    </tr>
+    <tr>
+      <td>PaddleOCR-VL</td>
+      <td><a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR</a></td>
+      <td><a href="https://huggingface.co/PaddlePaddle/PaddleOCR-VL">Hugging Face PaddleOCR-VL</a></td>
+    </tr>
+    <tr>
+      <td>Dolphin-1.5</td>
+      <td><a href="https://github.com/bytedance/Dolphin">Dolphin</a></td>
+      <td><a href="https://huggingface.co/ByteDance/Dolphin-1.5">Hugging Face Dolphin-1.5</a></td>
     </tr>
   </tbody>
 </table>
