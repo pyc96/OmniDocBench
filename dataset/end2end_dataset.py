@@ -162,6 +162,7 @@ class End2EndDataset():
             img_name = os.path.basename(sample["page_info"]["image_path"])
             
             # print('Process: ', img_name)
+            img_name = "output" + img_name
             pred_path = os.path.join(pred_folder, img_name[:-4] + '.md')
             if not os.path.exists(pred_path):
                 pred_path = os.path.join(pred_folder, img_name[:-4].replace('.pdf', "") + '.mmd')  # nougat
@@ -170,8 +171,11 @@ class End2EndDataset():
                     if not os.path.exists(pred_path):
                         pred_path = os.path.join(pred_folder, img_name + '.md')
                         if not os.path.exists(pred_path):  # mineru
-                            print(f'!!!WARNING: No prediction for {img_name}')
-                            continue
+                            pred_path = os.path.join(pred_folder, img_name)
+                            
+                            if not os.path.exists(pred_path): 
+                                print(f'!!!WARNING: No prediction for {img_name}')
+                                continue
 
             process_bar.set_description(f'Processing {os.path.basename(pred_path)}')
             pred_content = read_md_file(pred_path)
